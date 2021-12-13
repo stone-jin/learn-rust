@@ -1,2 +1,2 @@
 build:
-	cargo run hello ./test/hello.txt
+	cargo run rust ./test/hello.txt
