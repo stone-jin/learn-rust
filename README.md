@@ -1,6 +1,6 @@
 # learn-rust
 
-## 使用rust开发一个cli工具
+## 一、使用rust开发一个cli工具
 
 目录：cli
 
@@ -26,4 +26,27 @@ query: hello, file_name: ./test/hello.txt
 result: 
 -> hello world
 -> hello rust
+```
+
+## 二、rust和c语言互相调用
+
+目录：ffi_lib
+
+- [x] 构建一个简单的C语言
+- [x] 构建一个rust程序，生成一个方法给c语言调用
+- [ ] rust返回结果给c语言
+- [ ] c语言给一个参数给rust函数 
+
+使用方法：
+
+```bash
+cd ffi_lib
+make build
+```
+
+输出结果如下：
+
+```bash
+hello from rust!
+hello world
 ```
