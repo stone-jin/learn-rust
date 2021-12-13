@@ -14,7 +14,7 @@
 
 ```bash
 cd cli
-make build // 或者：	cargo run rust ./test/hello.txt
+make build // 或者：cargo run rust ./test/hello.txt
 ```
 
 输出结果： 读取test文件夹中的 `hello.txt` 里面带有 `rust` 的行
