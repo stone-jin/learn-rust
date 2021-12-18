@@ -1,0 +1,30 @@
+{
+  "name": "stone-rust-napi",
+  "version": "0.0.0",
+  "napi": {
+    "name": "stone-rust-napi",
+    "triples": {}
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@node-rs/helper": "^1.2.1"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^1.2.1"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "prepublishOnly": "napi prepublish -t npm",
+    "version": "napi version"
+  },
+  "optionalDependencies": {
+    "stone-rust-napi-win32-x64-msvc": "0.0.0",
+    "stone-rust-napi-darwin-x64": "0.0.0",
+    "stone-rust-napi-linux-x64-gnu": "0.0.0"
+  }
+}

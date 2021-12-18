@@ -50,3 +50,12 @@ make build
 hello from rust!
 hello world
 ```
+
+### 三、使用napi.rs和js相互交互
+
+目录：napi
+
+- [x] 创建一个napi.rs项目
+- [x] 用napi.rs构建一个npm包
+- [x] 测试代码：test/index.js，测试async await函数和普通函数
+- [] 发布npm包
