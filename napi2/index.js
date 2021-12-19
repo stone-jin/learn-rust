@@ -210,7 +210,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { sum, getStr, getNums, sumNums, readFileAsync, asyncMultiTwo, bigAdd, createBigIntI64, createBigInt } = nativeBinding
+const { sum, getStr, getNums, sumNums, readFileAsync, asyncMultiTwo, bigAdd, createBigIntI64, createBigInt, getCurrentDir, readFile, throwError } = nativeBinding
 
 module.exports.sum = sum
 module.exports.getStr = getStr
@@ -221,3 +221,6 @@ module.exports.asyncMultiTwo = asyncMultiTwo
 module.exports.bigAdd = bigAdd
 module.exports.createBigIntI64 = createBigIntI64
 module.exports.createBigInt = createBigInt
+module.exports.getCurrentDir = getCurrentDir
+module.exports.readFile = readFile
+module.exports.throwError = throwError

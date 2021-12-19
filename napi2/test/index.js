@@ -25,3 +25,17 @@ console.log(`bigAdd result: ${res}`)
 console.log(hello.createBigIntI64())
 
 console.log(hello.createBigInt())
+
+hello.getCurrentDir(res => {
+    console.log(res)
+})
+
+hello.readFile((err, res) => {
+    console.log(err, res)
+})
+
+try {
+    hello.throwError()
+} catch (e) {
+    console.log(e)
+}

@@ -15,3 +15,6 @@ export function asyncMultiTwo(num: number): Promise<number>
 export function bigAdd(a: BigInt, b: BigInt): BigInt
 export function createBigIntI64(): BigInt
 export function createBigInt(): BigInt
+export function getCurrentDir(callback: (arg0: string) => void): void
+export function readFile(callback: (arg0: Error | undefined, arg1?: string | undefined | null) => void): void
+export function throwError(): void

@@ -6,6 +6,7 @@ extern crate napi_derive;
 use futures::prelude::*;
 use napi::bindgen_prelude::{ Result, Buffer, Error, Status, BigInt, i64n};
 use tokio::fs;
+use std::env;
 
 
 #[napi]
@@ -72,3 +73,30 @@ fn create_big_int() -> BigInt {
     sign_bit: true,
   }
 }
+
+// callback
+
+#[napi]
+fn get_current_dir<T: Fn(String) -> Result<()>>(callback: T) {
+  callback(env::current_dir().unwrap().to_string_lossy().to_string()).unwrap();
+}
+
+#[napi]
+fn read_file<T: Fn(Result<()>, Option<String>) -> Result<()>>(callback: T) {
+  match read_file_content(){
+    Ok(s) => callback(Ok(()), Some(s)),
+    Err(e) => callback(Err(e), None),
+  }.unwrap();
+}
+
+fn read_file_content() -> Result<String>{
+  Ok("hello world".to_string())
+}
+
+// error
+
+#[napi]
+fn throw_error()->Result<()>{
+  Err(Error::new(Status::InvalidArg, "Manual Error".to_owned()))
+}
+
