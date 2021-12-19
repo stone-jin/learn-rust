@@ -59,3 +59,12 @@ hello world
 - [x] 用napi.rs构建一个npm包
 - [x] 测试代码：test/index.js，测试async await函数和普通函数
 - [] 发布npm包
+
+### 四、使用napi.rs 2.x 和js相互交互
+
+目录: napi2
+
+- [x] 创建一个napi.rs项目
+- [x] 用napi.rs构建一个npm包
+- [x] 测试代码：test/index.js
+- [] 发布npm包
