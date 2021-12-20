@@ -210,7 +210,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { sum, getStr, getNums, sumNums, readFileAsync, asyncMultiTwo, bigAdd, createBigIntI64, createBigInt, getCurrentDir, readFile, throwError, ClassWithFactory, Kind, CustomNumEnum, enumToI32, mapOption, returnNull, returnUndefined, add, fibonacci, asyncPlus100 } = nativeBinding
+const { sum, getStr, getNums, sumNums, readFileAsync, asyncMultiTwo, bigAdd, createBigIntI64, createBigInt, getCurrentDir, readFile, throwError, ClassWithFactory, Kind, CustomNumEnum, enumToI32, mapOption, returnNull, returnUndefined, add, fibonacci, asyncPlus100, Animal, Blake2BHasher, Blake2BKey, Context, AnimalWithDefaultConstructor } = nativeBinding
 
 module.exports.sum = sum
 module.exports.getStr = getStr
@@ -234,3 +234,8 @@ module.exports.returnUndefined = returnUndefined
 module.exports.add = add
 module.exports.fibonacci = fibonacci
 module.exports.asyncPlus100 = asyncPlus100
+module.exports.Animal = Animal
+module.exports.Blake2BHasher = Blake2BHasher
+module.exports.Blake2BKey = Blake2BKey
+module.exports.Context = Context
+module.exports.AnimalWithDefaultConstructor = AnimalWithDefaultConstructor

@@ -45,3 +45,27 @@ export class ClassWithFactory {
   static withName(name: string): ClassWithFactory
   setName(name: string): this
 }
+export class Animal {
+  readonly kind: Kind
+  constructor(kind: Kind, name: string)
+  static withKind(kind: Kind): Animal
+  get name(): string
+  set name(name: string)
+  whoami(): string
+  static getDogKind(): Kind
+}
+export class Blake2BHasher {
+  static withKey(key: Blake2bKey): Blake2BHasher
+}
+export class Blake2BKey { }
+export class Context {
+  maybeNeed?: boolean | undefined | null
+  constructor()
+  static withData(data: string): Context
+  method(): string
+}
+export class AnimalWithDefaultConstructor {
+  name: string
+  kind: number
+  constructor(name: string, kind: number)
+}

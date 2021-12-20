@@ -61,3 +61,8 @@ hello.asyncPlus100(
     setTimeout(() => resolve(10), 100);
   })
 );
+
+let cat1 = new hello.Animal(hello.Kind.Cat, 'cat1');
+console.log(cat1.name);
+console.log(cat1.whoami());
+console.log(hello.Animal.getDogKind());
