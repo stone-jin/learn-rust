@@ -4,7 +4,7 @@
 extern crate napi_derive;
 
 use futures::prelude::*;
-use napi::bindgen_prelude::{ Result, Buffer, Error, Status, BigInt, i64n};
+use napi::bindgen_prelude::{ Result, Buffer, Error, Status, BigInt, i64n, Undefined, ToNapiValue, Null, Promise};
 use tokio::fs;
 use std::env;
 
@@ -100,3 +100,84 @@ fn throw_error()->Result<()>{
   Err(Error::new(Status::InvalidArg, "Manual Error".to_owned()))
 }
 
+// class_factory
+#[napi]
+struct ClassWithFactory{
+  pub name: String,
+}
+
+#[napi]
+impl ClassWithFactory{
+  #[napi(factory)]
+  pub fn with_name(name: String) -> Self{
+    Self { name}
+  }
+
+  #[napi]
+  pub fn set_name(&mut self, name: String ) -> &Self{
+    self.name = name;
+    self
+  }
+}
+
+// enum
+
+#[napi]
+pub enum Kind{
+  Dog,
+  Cat,
+  Duck,
+}
+
+#[napi]
+pub enum CustomNumEnum{
+  One = 1,
+  Two,
+  Three = 3,
+  Four,
+  Six = 6,
+  Eight = 8,
+  Nine,
+  Ten,
+}
+
+#[napi]
+fn enum_to_i32(e: CustomNumEnum) -> i32{
+  e as i32
+}
+
+// nullable
+#[napi]
+fn map_option(val: Option<u32>) -> Option<u32>{
+  val.map(|v| v + 1)
+}
+
+#[napi]
+fn return_null() -> Null{
+  Null
+}
+
+#[napi]
+fn return_undefined() -> Undefined{
+  
+}
+
+// number
+#[napi]
+fn add(a: i32, b: i32) -> i32{
+  a + b
+}
+
+#[napi(strict)]
+fn fibonacci(n: u32)-> u32 {
+  match n{
+    1|2 => 1,
+    _ => fibonacci(n -1 ) + fibonacci(n -2),
+  }
+}
+
+#[napi]
+pub async fn async_plus_100(p: Promise<u32>) -> Result<u32>{
+  let v = p.await?;
+  Ok(v + 100)
+}
