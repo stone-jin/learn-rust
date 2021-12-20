@@ -66,3 +66,16 @@ let cat1 = new hello.Animal(hello.Kind.Cat, 'cat1');
 console.log(cat1.name);
 console.log(cat1.whoami());
 console.log(hello.Animal.getDogKind());
+
+console.log(hello.getBuffer().toString());
+
+console.log(hello.createExtenalTypedArray());
+
+console.log(hello.convertU32Array(new Uint32Array([1, 2, 34])));
+
+let info = new Float32Array([1.0, 3.3]);
+hello.mutateTypedArray(info);
+console.log(info);
+
+let sym = hello.createSymbol();
+console.log(hello.setSymbolInObj(sym));

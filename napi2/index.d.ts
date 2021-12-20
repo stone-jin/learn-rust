@@ -40,6 +40,12 @@ export function returnUndefined(): Undefined
 export function add(a: number, b: number): number
 export function fibonacci(n: number): number
 export function asyncPlus100(p: Promise<number>): Promise<number>
+export function getBuffer(): Buffer
+export function convertU32Array(input: Uint32Array): Array<number>
+export function createExtenalTypedArray(): Uint32Array
+export function mutateTypedArray(input: Float32Array): void
+export function createSymbol(): symbol
+export function setSymbolInObj(symbol: symbol): object
 export class ClassWithFactory {
   name: string
   static withName(name: string): ClassWithFactory

@@ -4,9 +4,11 @@
 extern crate napi_derive;
 
 use futures::prelude::*;
-use napi::bindgen_prelude::{ Result, Buffer, Error, Status, BigInt, i64n, Undefined, ToNapiValue, Null, Promise};
+use napi::bindgen_prelude::{ Result, Buffer, Error, Status, BigInt, i64n, Undefined, Symbol,
+  ToNapiValue, Null, Promise, Uint32Array, Float32Array};
 use tokio::fs;
 use std::env;
+use napi::{ JsObject, Env, JsSymbol};
 
 
 #[napi]
@@ -287,4 +289,53 @@ impl Context {
 pub struct AnimalWithDefaultConstructor {
   pub name: String,
   pub kind: u32,
+}
+
+//typed_array
+
+#[napi]
+fn get_buffer() -> Buffer{
+  String::from("hello world").as_bytes().into()
+}
+
+// #[napi]
+// fn append_buffer(buf: Buffer)-> Buffer{
+//   let mut buf = Vec::<u8>::from(buf);
+//   buf.push('!' as u8);
+//   buf.into()
+// }
+
+#[napi]
+fn convert_u32_array(input: Uint32Array) -> Vec<u32>{
+  input.to_vec()
+}
+
+#[napi]
+fn create_extenal_typed_array() -> Uint32Array{
+  Uint32Array::new(vec![1,2,3,4])
+}
+
+#[napi]
+fn mutate_typed_array(mut input: Float32Array){
+  for item in input.as_mut(){
+    *item *= 2.0;
+  }
+}
+
+// #[napi]
+// fn convert_float_array(input: Float32Array) ->Vec<Number>{
+//   input.to_vec()
+// }
+
+// symbol
+#[napi]
+pub fn create_symbol() -> Symbol{
+  Symbol::new("a symbol".to_owned())
+}
+
+#[napi]
+pub fn set_symbol_in_obj(env: Env, symbol: JsSymbol)-> Result<JsObject>{
+  let mut obj = env.create_object()?;
+  obj.set_property(symbol, env.create_string("a symbol")?)?;
+  Ok(obj)
 }
