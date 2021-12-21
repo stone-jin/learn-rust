@@ -33,3 +33,21 @@ fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
     };
     gen.into()
 }
+
+#[proc_macro_attribute]
+pub fn napi(_attr: TokenStream, _item: TokenStream) -> TokenStream {
+  //  let gen = quote! {
+  //       impl HelloMacro for #name {
+  //           fn hello_macro() {
+  //               println!("Hello, Macro! My name is {}!", stringify!(#name));
+  //           }
+  //       }
+  //   };
+  // let ast: syn::DeriveInput = syn::parse(item).unwrap();
+  let gen = quote!{
+    fn hello(){
+      println!("new hello world");
+    }
+  };
+  gen.into()
+}

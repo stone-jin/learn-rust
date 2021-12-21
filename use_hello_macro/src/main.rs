@@ -8,6 +8,12 @@ trait HelloMacro {
 #[derive(HelloMacro)]
 struct Pancakes;
 
+#[napi]
+fn hello(){
+  println!("hello world");
+}
+
 fn main() {
     Pancakes::hello_macro();
+    hello();
 }
