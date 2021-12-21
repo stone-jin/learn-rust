@@ -4,12 +4,13 @@
 extern crate napi_derive;
 
 use futures::prelude::*;
-use napi::bindgen_prelude::{ Result, Buffer, Error, Status, BigInt, i64n, Undefined, Symbol,
-  ToNapiValue, Null, Promise, Uint32Array, Float32Array};
-use tokio::fs;
+use napi::bindgen_prelude::{
+  i64n, BigInt, Buffer, Error, Float32Array, Null, Promise, Result, Status, Symbol, ToNapiValue,
+  Uint32Array, Undefined,
+};
+use napi::{Env, JsObject, JsSymbol};
 use std::env;
-use napi::{ JsObject, Env, JsSymbol};
-
+use tokio::fs;
 
 #[napi]
 fn sum(a: i32, b: i32) -> i32 {
@@ -17,7 +18,7 @@ fn sum(a: i32, b: i32) -> i32 {
 }
 
 #[napi]
-fn get_str() -> Vec<&'static str>{
+fn get_str() -> Vec<&'static str> {
   vec!["foo", "bar"]
 }
 
@@ -27,13 +28,11 @@ fn get_nums() -> Vec<u32> {
 }
 
 #[napi]
-fn sum_nums(nums: Vec<u32>) -> u32{
+fn sum_nums(nums: Vec<u32>) -> u32 {
   nums.iter().sum()
 }
 
-
 // async
-
 
 #[napi]
 async fn read_file_async(path: String) -> Result<Buffer> {
@@ -49,22 +48,21 @@ async fn read_file_async(path: String) -> Result<Buffer> {
 }
 
 #[napi]
-async fn async_multi_two(num: u32) -> Result<u32>{
+async fn async_multi_two(num: u32) -> Result<u32> {
   tokio::task::spawn(async move { Ok(num * 2) })
-  .await
+    .await
     .unwrap()
 }
-
 
 // bigint
 
 #[napi]
-fn big_add(a: BigInt, b: BigInt) -> u128{
+fn big_add(a: BigInt, b: BigInt) -> u128 {
   a.get_u128().1 + b.get_u128().1
 }
 
 #[napi]
-fn create_big_int_i64() -> i64n{
+fn create_big_int_i64() -> i64n {
   i64n(1000)
 }
 
@@ -85,38 +83,39 @@ fn get_current_dir<T: Fn(String) -> Result<()>>(callback: T) {
 
 #[napi]
 fn read_file<T: Fn(Result<()>, Option<String>) -> Result<()>>(callback: T) {
-  match read_file_content(){
+  match read_file_content() {
     Ok(s) => callback(Ok(()), Some(s)),
     Err(e) => callback(Err(e), None),
-  }.unwrap();
+  }
+  .unwrap();
 }
 
-fn read_file_content() -> Result<String>{
+fn read_file_content() -> Result<String> {
   Ok("hello world".to_string())
 }
 
 // error
 
 #[napi]
-fn throw_error()->Result<()>{
+fn throw_error() -> Result<()> {
   Err(Error::new(Status::InvalidArg, "Manual Error".to_owned()))
 }
 
 // class_factory
 #[napi]
-struct ClassWithFactory{
+struct ClassWithFactory {
   pub name: String,
 }
 
 #[napi]
-impl ClassWithFactory{
+impl ClassWithFactory {
   #[napi(factory)]
-  pub fn with_name(name: String) -> Self{
-    Self { name}
+  pub fn with_name(name: String) -> Self {
+    Self { name }
   }
 
   #[napi]
-  pub fn set_name(&mut self, name: String ) -> &Self{
+  pub fn set_name(&mut self, name: String) -> &Self {
     self.name = name;
     self
   }
@@ -125,14 +124,14 @@ impl ClassWithFactory{
 // enum
 
 #[napi]
-pub enum Kind{
+pub enum Kind {
   Dog,
   Cat,
   Duck,
 }
 
 #[napi]
-pub enum CustomNumEnum{
+pub enum CustomNumEnum {
   One = 1,
   Two,
   Three = 3,
@@ -144,48 +143,46 @@ pub enum CustomNumEnum{
 }
 
 #[napi]
-fn enum_to_i32(e: CustomNumEnum) -> i32{
+fn enum_to_i32(e: CustomNumEnum) -> i32 {
   e as i32
 }
 
 // nullable
 #[napi]
-fn map_option(val: Option<u32>) -> Option<u32>{
+fn map_option(val: Option<u32>) -> Option<u32> {
   val.map(|v| v + 1)
 }
 
 #[napi]
-fn return_null() -> Null{
+fn return_null() -> Null {
   Null
 }
 
 #[napi]
-fn return_undefined() -> Undefined{
-  
-}
+fn return_undefined() -> Undefined {}
 
 // number
 #[napi]
-fn add(a: i32, b: i32) -> i32{
+fn add(a: i32, b: i32) -> i32 {
   a + b
 }
 
 #[napi(strict)]
-fn fibonacci(n: u32)-> u32 {
-  match n{
-    1|2 => 1,
-    _ => fibonacci(n -1 ) + fibonacci(n -2),
+fn fibonacci(n: u32) -> u32 {
+  match n {
+    1 | 2 => 1,
+    _ => fibonacci(n - 1) + fibonacci(n - 2),
   }
 }
 
 #[napi]
-pub async fn async_plus_100(p: Promise<u32>) -> Result<u32>{
+pub async fn async_plus_100(p: Promise<u32>) -> Result<u32> {
   let v = p.await?;
   Ok(v + 100)
 }
 
 #[napi]
-pub struct Animal{
+pub struct Animal {
   #[napi(readonly)]
   pub kind: Kind,
 
@@ -193,42 +190,41 @@ pub struct Animal{
 }
 
 #[napi]
-impl Animal{
+impl Animal {
   #[napi(constructor)]
-  pub fn new(kind: Kind, name: String) -> Self{
-    Animal { kind, name}
+  pub fn new(kind: Kind, name: String) -> Self {
+    Animal { kind, name }
   }
 
   #[napi(factory)]
-  pub fn with_kind(kind: Kind) -> Self{
-    Animal{
+  pub fn with_kind(kind: Kind) -> Self {
+    Animal {
       kind,
       name: "Default".to_owned(),
     }
   }
 
   #[napi(getter)]
-  pub fn get_name(&self) -> &str{
+  pub fn get_name(&self) -> &str {
     self.name.as_str()
   }
 
   #[napi(setter)]
-  pub fn set_name(&mut self, name: String){
+  pub fn set_name(&mut self, name: String) {
     self.name = name;
   }
 
   #[napi]
-  pub fn whoami(&self)->String{
-    match self.kind{
+  pub fn whoami(&self) -> String {
+    match self.kind {
       Kind::Dog => format!("Dog: {}", self.name),
       Kind::Cat => format!("Cat: {}", self.name),
       Kind::Duck => format!("Duck: {}", self.name),
-
     }
   }
 
   #[napi]
-  pub fn get_dog_kind()->Kind{
+  pub fn get_dog_kind() -> Kind {
     Kind::Dog
   }
 }
@@ -238,9 +234,9 @@ impl Animal{
 pub struct Blake2bHasher(u32);
 
 #[napi]
-impl Blake2bHasher{
+impl Blake2bHasher {
   #[napi(factory)]
-  pub fn with_key(key: &Blake2bKey)->Self{
+  pub fn with_key(key: &Blake2bKey) -> Self {
     Blake2bHasher(key.get_inner())
   }
 }
@@ -248,8 +244,8 @@ impl Blake2bHasher{
 #[napi]
 pub struct Blake2bKey(u32);
 
-impl Blake2bKey{
-  fn get_inner(&self) -> u32{
+impl Blake2bKey {
+  fn get_inner(&self) -> u32 {
     self.0
   }
 }
@@ -294,7 +290,7 @@ pub struct AnimalWithDefaultConstructor {
 //typed_array
 
 #[napi]
-fn get_buffer() -> Buffer{
+fn get_buffer() -> Buffer {
   String::from("hello world").as_bytes().into()
 }
 
@@ -306,18 +302,18 @@ fn get_buffer() -> Buffer{
 // }
 
 #[napi]
-fn convert_u32_array(input: Uint32Array) -> Vec<u32>{
+fn convert_u32_array(input: Uint32Array) -> Vec<u32> {
   input.to_vec()
 }
 
 #[napi]
-fn create_extenal_typed_array() -> Uint32Array{
-  Uint32Array::new(vec![1,2,3,4])
+fn create_extenal_typed_array() -> Uint32Array {
+  Uint32Array::new(vec![1, 2, 3, 4])
 }
 
 #[napi]
-fn mutate_typed_array(mut input: Float32Array){
-  for item in input.as_mut(){
+fn mutate_typed_array(mut input: Float32Array) {
+  for item in input.as_mut() {
     *item *= 2.0;
   }
 }
@@ -329,12 +325,17 @@ fn mutate_typed_array(mut input: Float32Array){
 
 // symbol
 #[napi]
-pub fn create_symbol() -> Symbol{
+pub fn create_symbol() -> Symbol {
   Symbol::new("a symbol".to_owned())
 }
 
 #[napi]
-pub fn set_symbol_in_obj(env: Env, symbol: JsSymbol)-> Result<JsObject>{
+pub fn create_symbol3() -> Symbol {
+  Symbol::new("a symbol".to_owned())
+}
+
+#[napi]
+pub fn set_symbol_in_obj(env: Env, symbol: JsSymbol) -> Result<JsObject> {
   let mut obj = env.create_object()?;
   obj.set_property(symbol, env.create_string("a symbol")?)?;
   Ok(obj)

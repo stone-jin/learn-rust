@@ -12,6 +12,3 @@ napi-derive = "1"
 
 [build-dependencies]
 napi-build = "1"
-
-[profile.release]
-lto = true

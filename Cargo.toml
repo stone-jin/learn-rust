@@ -1,0 +1,10 @@
+[workspace]
+members = [
+  "./cli",
+  "./ffi_lib",
+  './napi',
+  './napi2',
+]
+
+[profile.release]
+lto = true
