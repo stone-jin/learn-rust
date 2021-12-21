@@ -51,3 +51,8 @@ pub fn napi(_attr: TokenStream, _item: TokenStream) -> TokenStream {
   };
   gen.into()
 }
+
+#[proc_macro]
+pub fn sql(input: TokenStream) -> TokenStream {
+  input.into()
+}

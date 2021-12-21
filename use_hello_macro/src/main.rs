@@ -15,5 +15,7 @@ fn hello(){
 
 fn main() {
     Pancakes::hello_macro();
+    let sql = sql!("select * from user");
+    println!("{}", sql);
     hello();
 }
