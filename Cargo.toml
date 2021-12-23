@@ -6,6 +6,7 @@ members = [
   './napi2',
   './hello_macro',
   './use_hello_macro',
+  './hello_thread',
 ]
 
 [profile.release]
