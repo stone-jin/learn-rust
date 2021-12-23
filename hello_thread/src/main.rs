@@ -1,6 +1,6 @@
 use std::time::Duration;
 use std::thread;
-use std::sync::mpsc;
+use std::sync::{mpsc, Mutex, Arc};
 
 fn demo1(){
   let v1 = vec![1,2,3];
@@ -76,9 +76,28 @@ fn demo_mpsc_mul_tx(){
   }
 } 
 
+fn demo_arc_mux(){
+  let counter = Arc::new(Mutex::new(0));
+  let mut handlers = vec![];
+  for _ in 0..10 {
+    let counter = Arc::clone(&counter);
+    let handler = std::thread::spawn(move || {
+      let mut m = counter.lock().unwrap();
+      *m += 1;
+    });
+    handlers.push(handler);
+  }
+
+  for handler in handlers{
+    handler.join().unwrap();
+  }
+  println!("counter: {}", *counter.lock().unwrap());
+}
+
 fn main() {
   demo1();
   demo_mpsc();
   demo_mpsc_mul_msg();
   demo_mpsc_mul_tx();
+  demo_arc_mux();
 }
