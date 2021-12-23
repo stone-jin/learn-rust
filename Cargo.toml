@@ -8,6 +8,7 @@ members = [
   './use_hello_macro',
   './hello_thread',
   './hello_tokio',
+  './hello_tokio_client',
 ]
 
 [profile.release]
