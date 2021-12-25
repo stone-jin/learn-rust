@@ -5,11 +5,12 @@ use tokio::spawn;
 use mini_redis::{Result};
 use std::collections::HashMap;
 use mini_redis::Command::{self, Get, Set};
+use std::sync::{Arc, Mutex};
+use bytes::Bytes;
 
-async fn process(tcpstream: TcpStream){
-    // A hashmap is used to store data
-    let mut db = HashMap::new();
+type Db = Arc<Mutex<HashMap<String, Bytes>>>;
 
+async fn process(tcpstream: TcpStream, db: Db){
     // Connection, provided by `mini-redis`, handles parsing frames from
     // the socket
     let mut connection = Connection::new(tcpstream);
@@ -18,11 +19,13 @@ async fn process(tcpstream: TcpStream){
     while let Some(frame) = connection.read_frame().await.unwrap() {
         let response = match Command::from_frame(frame).unwrap() {
             Set(cmd) => {
+                let mut db = db.lock().unwrap();
                 // The value is stored as `Vec<u8>`
-                db.insert(cmd.key().to_string(), cmd.value().to_vec());
+                db.insert(cmd.key().to_string(), cmd.value().clone());
                 Frame::Simple("OK".to_string())
             }
             Get(cmd) => {
+                let db = db.lock().unwrap();
                 if let Some(value) = db.get(cmd.key()) {
                     // `Frame::Bulk` expects data to be of type `Bytes`. This
                     // type will be covered later in the tutorial. For now,
@@ -42,11 +45,14 @@ async fn process(tcpstream: TcpStream){
 
 async fn start_server(){
   let listener = TcpListener::bind("127.0.0.1:6379").await.unwrap();
+
+  let db = Arc::new(Mutex::new(HashMap::new()));
   loop{
     let (tcpstream, address) = listener.accept().await.unwrap();
     println!("address: {}", address);
+    let db = db.clone();
     spawn(async move {
-      process(tcpstream).await;
+      process(tcpstream, db).await;
     });
   }
 }
