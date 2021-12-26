@@ -60,8 +60,20 @@ async fn start_server(){
 #[tokio::main]
 async fn main() -> Result<()> {
 
+    match tokio::signal::ctrl_c().await{
+      Ok(())=>{
+        println!("ctrl + c");
+        eprintln!("stop by ctrl+C");
+        std::process::exit(0);
+      },
+      Err(err)=>{
+        eprintln!("Unable to listen for shutdown signal: {}", err);
+      }
+    }
+
     println!("in server");
 
     start_server().await;
+
     Ok(())
 }
